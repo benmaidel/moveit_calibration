@@ -188,6 +188,8 @@ private Q_SLOTS:
 
   void autoSkipBtnClicked(bool clicked);
 
+  void autoTakeSampleBtnClicked(bool clicked);
+
   void planFinished();
 
   void executeFinished();
@@ -219,6 +221,7 @@ private:
   QPushButton* auto_plan_btn_;
   QPushButton* auto_execute_btn_;
   QPushButton* auto_skip_btn_;
+  QPushButton* auto_take_sample_btn_;
 
   // Progress of finished joint states for auto calibration
   ProgressBarWidget* auto_progress_;

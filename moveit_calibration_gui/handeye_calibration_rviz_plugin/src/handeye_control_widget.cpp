@@ -218,6 +218,12 @@ ControlTabWidget::ControlTabWidget(QWidget* parent)
   connect(auto_skip_btn_, SIGNAL(clicked(bool)), this, SLOT(autoSkipBtnClicked(bool)));
   auto_btns_layout->addWidget(auto_skip_btn_);
 
+  auto_take_sample_btn_ = new QPushButton("Take Sample");
+  auto_take_sample_btn_->setMinimumHeight(35);
+  auto_take_sample_btn_->setToolTip("Take a new sample");
+  connect(auto_take_sample_btn_, SIGNAL(clicked(bool)), this, SLOT(autoTakeSampleBtnClicked(bool)));
+  auto_btns_layout->addWidget(auto_take_sample_btn_);
+
   // Initialize handeye solver plugins
   std::vector<std::string> plugins;
   if (loadSolverPlugin(plugins))
@@ -1031,11 +1037,6 @@ void ControlTabWidget::executeFinished()
   if (planning_res_ == ControlTabWidget::SUCCESS)
   {
     auto_progress_->setValue(auto_progress_->getValue() + 1);
-    if (!frameNamesEmpty())
-      takeTransformSamples();
-
-    if (effector_wrt_world_.size() == object_wrt_sensor_.size() && effector_wrt_world_.size() > 4)
-      solveCameraRobotPose();
   }
   ROS_DEBUG_NAMED(LOGNAME, "Execution finished");
 }
@@ -1043,6 +1044,15 @@ void ControlTabWidget::executeFinished()
 void ControlTabWidget::autoSkipBtnClicked(bool clicked)
 {
   auto_progress_->setValue(auto_progress_->getValue() + 1);
+}
+
+void ControlTabWidget::autoTakeSampleBtnClicked(bool clicked)
+{
+  if (!frameNamesEmpty())
+      takeTransformSamples();
+
+  if (effector_wrt_world_.size() == object_wrt_sensor_.size() && effector_wrt_world_.size() > 4)
+    solveCameraRobotPose();
 }
 
 }  // namespace moveit_rviz_plugin
